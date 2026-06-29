@@ -1,23 +1,24 @@
 #!/usr/bin/python3
-"""Module for printing the titles of the first 10 hot Reddit posts."""
+"""This module queries the Reddit API and prints the titles of the
+first 10 hot posts for a given subreddit."""
 
 import requests
 
 
 def top_ten(subreddit):
-    """Print the titles of the first 10 hot posts for a subreddit.
+    """Print the titles of the first 10 hot posts of a subreddit.
 
-    If the subreddit is invalid, print None.
+    Prints None if the subreddit is invalid.
     """
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json?limit=10"
-    headers = {
-        "User-Agent": "python:reddit.api:v1.0 (by /u/example)"
-    }
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    headers = {"User-Agent": "python:reddit.api:v1.0 (by /u/example)"}
+    params = {"limit": 10}
 
     try:
         response = requests.get(
             url,
             headers=headers,
+            params=params,
             allow_redirects=False,
             timeout=10
         )
@@ -29,7 +30,7 @@ def top_ten(subreddit):
         posts = response.json().get("data", {}).get("children", [])
 
         for post in posts:
-            print(post.get("data", {}).get("title"))
+            print(post["data"]["title"])
 
     except Exception:
         print(None)
