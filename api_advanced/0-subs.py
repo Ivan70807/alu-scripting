@@ -1,14 +1,24 @@
 #!/usr/bin/python3
-"""Module for querying the Reddit API."""
+"""Module that queries the Reddit API and returns the number of
+subscribers for a given subreddit.
+"""
 
 import requests
 
 
 def number_of_subscribers(subreddit):
-    """Return the total number of subscribers for a subreddit."""
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    """Return the number of subscribers for a subreddit.
+
+    Args:
+        subreddit (str): The name of the subreddit.
+
+    Returns:
+        int: The total number of subscribers, or 0 if the subreddit
+        is invalid or the request fails.
+    """
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {
-        "User-Agent": "python:reddit-api:v1.0 (by /u/example)"
+        "User-Agent": "python:api-advanced:v1.0 (by /u/reddit_api_project)"
     }
 
     try:
@@ -24,5 +34,6 @@ def number_of_subscribers(subreddit):
 
         data = response.json()
         return data.get("data", {}).get("subscribers", 0)
-    except Exception:
+
+    except (requests.RequestException, ValueError):
         return 0
